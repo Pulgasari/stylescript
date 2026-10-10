@@ -2,7 +2,7 @@
 import compile from './stylescript-compiler.js';
 
 // Define routing matcher for StyleScript files
-export const config = { matcher: ':path*.ss' };
+export const config = { matcher: '/:path*.ss' };
 
 export async function middleware (request) {
   // 1. fetch the raw static .ss asset from Vercel's internal origin
