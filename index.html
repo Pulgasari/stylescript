@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <link rel="stylesheet" href="test.ss" />
-  <script>navigator?.serviceWorker?.register('/stylescript-sw.js');</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StyleScript Demo</title>
+  <link rel="stylesheet" href="demo.ss" />
+  <script type="module" src="/stylescript.js"></script>
 </head>
 <body>
-  <h1>Hello StyleScript</h1>
+  <div class="card">
+    <h1>StyleScript Live Demo</h1>
+    <p>This UI is styled with StyleScript compiled on the fly in the browser.</p>
+    <button class="btn">Hover Me</button>
+  </div>
 </body>
 </html>
