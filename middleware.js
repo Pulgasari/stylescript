@@ -1,17 +1,24 @@
 // middleware.js
 import compile from './stylescript-compiler.js';
 
-// Define routing matcher for StyleScript files
+// define routing matcher for StyleScript files
 export const config = { matcher: '/:path*.ss' };
 
 export async function middleware (request) {
-  // 1. fetch the raw static .ss asset from Vercel's internal origin
-  // 2. transpile StyleScript to CSS at the edge
-  const response = await fetch(request.url); if (!response.ok) return response;
-  const   ssCode = await response.text();
-  const  cssCode = compile(ssCode);
+  // 1. pass through to the static file if this is our internal fetch
+  if (request.headers.get('x-skip-middleware') === '1') {
+    return new Response (null, { headers: { 'x-middleware-next': '1' }});
+  }
 
-  // 3. return compiled CSS to the browser with proper caching and content-type
+  // 2. fetch the raw static asset with the skip header attached
+  const response = await fetch(request.url, { headers: { 'x-skip-middleware': '1' }});     
+  if (!response.ok) return response;
+  
+  // 3. transpile StyleScript to CSS at the edge
+  const ssCode = await response.text();
+  const cssCode = compile(ssCode);
+
+  // 4. return compiled CSS to the browser
   return new Response(cssCode, {
     status: 200,
     headers: {
