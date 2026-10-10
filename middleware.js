@@ -1,46 +1,29 @@
+// middleware.js
 import compile from './stylescript-compiler.js';
 
-// Define routing matcher for StyleScript files
+// define routing matcher for StyleScript files
 export const config = { matcher: '/:path*.ss' };
 
 export async function middleware (request) {
-  const url = new URL(request.url);
-
-  // 1. Pass through to static asset if this is our internal fetch with ?raw=1
-  if (url.searchParams.has('raw')) {
-    return new Response(null, {
-      headers: {
-        'x-middleware-next': '1',
-      },
-    });
+  // 1. pass through to the static file if this is our internal fetch
+  if (request.headers.get('x-skip-middleware') === '1') {
+    return new Response (null, { headers: { 'x-middleware-next': '1' }});
   }
 
-  // 2. Fetch the raw static asset from Vercel CDN using a query parameter
-  url.searchParams.set('raw', '1');
-  const response = await fetch(url.toString());
+  // 2. fetch the raw static asset with the skip header attached
+  const response = await fetch(request.url, { headers: { 'x-skip-middleware': '1' }});     
+  if (!response.ok) return response;
+  
+  // 3. transpile StyleScript to CSS at the edge
+  const  ssCode = await response.text();
+  const cssCode = compile(ssCode);
 
-  if (!response.ok) {
-    return response;
+  // 4. return compiled CSS to the browser
+  return new Response(cssCode, {
+    status: 200,
+    headers: {
+      'Content-Type': 'text/css; charset=utf-8',
+      'Cache-Control': 'public, max-age=0, must-revalidate',
+    },
+  });
   }
-
-  // 3. Transpile StyleScript to CSS at the edge
-  try {
-    const ssCode = await response.text();
-    const cssCode = compile(ssCode);
-
-    // 4. Return compiled CSS to the browser
-    return new Response(cssCode, {
-      status: 200,
-      headers: {
-        'Content-Type': 'text/css; charset=utf-8',
-        'Cache-Control': 'public, max-age=0, must-revalidate',
-      },
-    });
-  } catch (error) {
-    console.error('StyleScript Compilation Error:', error);
-    return new Response(`/* StyleScript compilation error: ${error.message} */`, {
-      status: 500,
-      headers: { 'Content-Type': 'text/css; charset=utf-8' },
-    });
-  }
-}
