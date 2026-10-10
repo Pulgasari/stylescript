@@ -1,0 +1,13 @@
+{
+  "git": {
+    "deploymentEnabled": false,
+    "ignoreCommand": "exit 0"
+  },
+  "trailingSlash": true,
+  "rewrites": [
+    {
+      "source": "/:page(demo)/",
+      "destination": "/demo.html"
+    }
+  ]
+}
