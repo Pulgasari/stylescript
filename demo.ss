@@ -1,5 +1,5 @@
 /* StyleScript Example Source */
-$bg-color = #ff0000;
+$bg-color = #880088;
 $card-bg = #ff5500;
 $accent-color = #3b82f6;
 $text-color = #f8fafc;
