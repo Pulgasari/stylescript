@@ -2,7 +2,7 @@ import { compileStyleScript } from './stylescript-compiler.js';
 
 // 1. Register Service Worker for subsequent visits
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/stylescript-service.js', { type: 'module' }).catch((err) => {
+  navigator.serviceWorker.register('./stylescript-service.js', { type: 'module' }).catch((err) => {
     console.error('[StyleScript] Service Worker registration failed:', err);
   });
 }
@@ -23,7 +23,7 @@ if (!navigator.serviceWorker.controller) {
       const $style = document.createElement('style');
       $style.dataset.stylescript = link.href;
       $style.textContent         = cssCode;
-      document.head.appendChild(styleTag);
+      document.head.appendChild($style);
     } catch (err) {
       console.error('[StyleScript] Cold start compilation failed:', err);
     }
