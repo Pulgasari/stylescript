@@ -25,21 +25,20 @@
 
 ```js
 // stylescript-sw.js (Service Worker)
-import { compileStyleScriptToCSS } from './compiler.js';
+import compile from '@stylescript/compiler.js';
 
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
-  // Intercept StyleScript files
+  // intercept StyleScript files
   if (url.pathname.endsWith('.ss')) {
     event.respondWith(
       (async () => {
         // 1. fetch raw StyleScript source code
-        const response = await fetch(event.request);
-        const ssCode = await response.text();
-
         // 2. compile StyleScript to standard CSS string
-        const cssCode = compileStyleScriptToCSS(ssCode);
+        const response = await fetch(event.request);
+        const   ssCode = await response.text();
+        const  cssCode = compile(ssCode);
 
         // 3. return as valid CSS to the browser rendering pipeline
         return new Response(cssCode, {
@@ -55,27 +54,19 @@ self.addEventListener('fetch', (event) => {
 
 ```js
 // middleware.js
-import { compileStyleScript } from './compiler.js';
+import compile from '@stylescript/compiler.js';
 
 // Define routing matcher for StyleScript files
-export const config = {
-  matcher: '/styles/:path*.ss',
-};
+export const config = { matcher: '/styles/:path*.ss' };
 
-export async function middleware(request) {
-  // 1. Fetch the raw static .ss asset from Vercel's internal origin
-  const response = await fetch(request.url);
+export async function middleware (request) {
+  // 1. fetch the raw static .ss asset from Vercel's internal origin
+  // 2. transpile StyleScript to CSS at the edge
+  const response = await fetch(request.url); if (!response.ok) return response;
+  const   ssCode = await response.text();
+  const  cssCode = compile(ssCode);
 
-  if (!response.ok) {
-    return response;
-  }
-
-  const ssCode = await response.text();
-
-  // 2. Transpile StyleScript to CSS at the Edge
-  const cssCode = compileStyleScript(ssCode);
-
-  // 3. Return compiled CSS to the browser with proper Caching and Content-Type
+  // 3. return compiled CSS to the browser with proper caching and content-type
   return new Response(cssCode, {
     status: 200,
     headers: {
