@@ -1,4 +1,4 @@
-import { compileStyleScript } from './stylescript-compiler.js';
+import compile from './stylescript-compiler.js';
 
 // 1. Register Service Worker for subsequent visits
 if ('serviceWorker' in navigator) {
@@ -17,7 +17,7 @@ if (!navigator.serviceWorker.controller) {
     try {
       const response = await fetch(link.href);
       const   ssCode = await response.text();
-      const  cssCode = compileStyleScript(ssCode);
+      const  cssCode = compile(ssCode);
 
       // Inject compiled CSS as fallback style block
       const $style = document.createElement('style');
