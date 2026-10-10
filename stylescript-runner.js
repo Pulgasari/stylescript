@@ -1,22 +1,31 @@
-// stylescript-runner.js
-import { compileStyleScriptToCSS } from './compiler.js';
+import { compileStyleScript } from './stylescript-compiler.js';
 
-// 1. Register the Service Worker for all upcoming requests
-navigator?.serviceWorker?.register('/stylescript-sw.js');
+// 1. Register Service Worker for subsequent visits
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/stylescript-sw.js', { type: 'module' }).catch((err) => {
+    console.error('[StyleScript] Service Worker registration failed:', err);
+  });
+}
 
-// 2. Fallback only for the VERY FIRST cold start
+// 2. Cold-Start Fallback: Execute manually if SW does not control the page yet
 if (!navigator.serviceWorker.controller) {
-  console.warn('[StyleScript] Cold start detected. SW not controlling page yet, falling back to JS compiler.');
+  console.info('[StyleScript] Cold start detected. Compiling styles inline as fallback.');
 
-  const ssLinks = document.querySelectorAll('link[href$=".ss"]');
-  
+  const ssLinks = document.querySelectorAll('link[rel="stylesheet"][href$=".ss"]');
+
   ssLinks.forEach(async (link) => {
-    const response = await fetch(link.href);
-    const code     = await response.text();
-    const css      = compileStyleScriptToCSS(code);
+    try {
+      const response = await fetch(link.href);
+      const ssCode = await response.text();
+      const cssCode = compileStyleScript(ssCode);
 
-    const style = document.createElement('style');
-    style.textContent = css;
-    document.head.appendChild(style);
+      // Inject compiled CSS as fallback style block
+      const styleTag = document.createElement('style');
+      styleTag.dataset.stylescript = link.href;
+      styleTag.textContent = cssCode;
+      document.head.appendChild(styleTag);
+    } catch (err) {
+      console.error('[StyleScript] Cold start compilation failed:', err);
+    }
   });
 }
