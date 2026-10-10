@@ -1,10 +1,10 @@
 // middleware.js
-import compile from '@stylescript/compiler.js';
+import compile from './stylescript-compiler.js';
 
 // Define routing matcher for StyleScript files
 export const config = { matcher: '/:path*.ss' };
 
-export async function middleware (request) {
+export default async function middleware (request) {
   // 1. fetch the raw static .ss asset from Vercel's internal origin
   // 2. transpile StyleScript to CSS at the edge
   const response = await fetch(request.url); if (!response.ok) return response;
@@ -20,5 +20,3 @@ export async function middleware (request) {
     },
   });
 }
-
-export default middleware;
