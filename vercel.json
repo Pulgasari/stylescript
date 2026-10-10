@@ -3,11 +3,11 @@
     "deploymentEnabled": false,
     "ignoreCommand": "exit 0"
   },
-  "trailingSlash": true,
+  "trailingSlash": false,
   "rewrites": [
     {
-      "source": "/:page(demo)/",
-      "destination": "/demo.html"
+      "source": "/:page(demo1)/",
+      "destination": "/demo1.html"
     }
   ]
 }
