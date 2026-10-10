@@ -1,6 +1,6 @@
 /* StyleScript Example Source */
-$bg-color = #0f172a;
-$card-bg = #1e293b;
+$bg-color = #ff0000;
+$card-bg = #ff5500;
 $accent-color = #3b82f6;
 $text-color = #f8fafc;
 
@@ -18,8 +18,6 @@ body {
 .card {
   background-color: $card-bg;
   padding: 2.5rem;
-  border-radius: 16px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
 
   h1 {
     color: $accent-color;
