@@ -1,5 +1,5 @@
 // stylescript-runtime.js
-import compile from 'stylescript-compiler.js';
+import compile from './stylescript-compiler.js';
 
 (async function () {
   // Find all StyleScript links
