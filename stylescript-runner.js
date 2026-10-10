@@ -2,7 +2,7 @@ import { compileStyleScript } from './stylescript-compiler.js';
 
 // 1. Register Service Worker for subsequent visits
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/stylescript-sw.js', { type: 'module' }).catch((err) => {
+  navigator.serviceWorker.register('/stylescript-service.js', { type: 'module' }).catch((err) => {
     console.error('[StyleScript] Service Worker registration failed:', err);
   });
 }
@@ -16,13 +16,13 @@ if (!navigator.serviceWorker.controller) {
   ssLinks.forEach(async (link) => {
     try {
       const response = await fetch(link.href);
-      const ssCode = await response.text();
-      const cssCode = compileStyleScript(ssCode);
+      const   ssCode = await response.text();
+      const  cssCode = compileStyleScript(ssCode);
 
       // Inject compiled CSS as fallback style block
-      const styleTag = document.createElement('style');
-      styleTag.dataset.stylescript = link.href;
-      styleTag.textContent = cssCode;
+      const $style = document.createElement('style');
+      $style.dataset.stylescript = link.href;
+      $style.textContent         = cssCode;
       document.head.appendChild(styleTag);
     } catch (err) {
       console.error('[StyleScript] Cold start compilation failed:', err);
