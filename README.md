@@ -11,10 +11,8 @@
   <link rel="stylesheet" href="/styles/main.ss" />
   
   <script>
-    // Register the compiler service worker
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/stylescript-sw.js');
-    }
+    // register the compiler service worker
+    navigator?.serviceWorker?.register('/stylescript-sw.js');
   </script>
 </head>
 <body>
@@ -34,14 +32,14 @@ self.addEventListener('fetch', (event) => {
   if (url.pathname.endsWith('.ss')) {
     event.respondWith(
       (async () => {
-        // 1. Fetch raw StyleScript source code
+        // 1. fetch raw StyleScript source code
         const response = await fetch(event.request);
         const ssCode = await response.text();
 
-        // 2. Compile StyleScript to standard CSS string
+        // 2. compile StyleScript to standard CSS string
         const cssCode = compileStyleScriptToCSS(ssCode);
 
-        // 3. Return as valid CSS to the browser rendering pipeline
+        // 3. return as valid CSS to the browser rendering pipeline
         return new Response(cssCode, {
           headers: { 'Content-Type': 'text/css' },
         });
