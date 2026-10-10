@@ -2,6 +2,8 @@
 
 ## strategies
 
+### 1. service worker
+
 ```html
 <!-- index.html -->
 <!DOCTYPE html>
@@ -47,4 +49,39 @@ self.addEventListener('fetch', (event) => {
     );
   }
 });
+```
+
+### 2. vercel | middleware.js
+
+```js
+// middleware.js
+import { compileStyleScript } from './compiler.js';
+
+// Define routing matcher for StyleScript files
+export const config = {
+  matcher: '/styles/:path*.ss',
+};
+
+export async function middleware(request) {
+  // 1. Fetch the raw static .ss asset from Vercel's internal origin
+  const response = await fetch(request.url);
+
+  if (!response.ok) {
+    return response;
+  }
+
+  const ssCode = await response.text();
+
+  // 2. Transpile StyleScript to CSS at the Edge
+  const cssCode = compileStyleScript(ssCode);
+
+  // 3. Return compiled CSS to the browser with proper Caching and Content-Type
+  return new Response(cssCode, {
+    status: 200,
+    headers: {
+      'Content-Type': 'text/css; charset=utf-8',
+      'Cache-Control': 'public, max-age=0, must-revalidate',
+    },
+  });
+}
 ```
