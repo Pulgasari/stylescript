@@ -5,7 +5,7 @@
  * - Nested CSS rules (.card { h1 { ... } })
  * - Parent selector substitution (&:hover)
  */
-export function compileStyleScript(ssCode) {
+function compile (ssCode) {
   // 1. Substitute variables
   const vars = {};
   let css = ssCode.replace(/\$([a-zA-Z0-9_-]+)\s*=\s*([^;]+);/g, (_, name, val) => {
@@ -21,12 +21,12 @@ export function compileStyleScript(ssCode) {
   return flattenCSS(css);
 }
 
-function flattenCSS(css, parentSelector = '') {
-  let output = '';
-  let buffer = '';
-  let depth = 0;
+function flattenCSS (css, parentSelector = '') {
+  let output          = '';
+  let buffer          = '';
+  let depth           = 0;
   let currentSelector = '';
-  let blockContent = '';
+  let blockContent    = '';
 
   for (let i = 0; i < css.length; i++) {
     const char = css[i];
@@ -76,10 +76,10 @@ function flattenCSS(css, parentSelector = '') {
   return output;
 }
 
-function extractPropsAndNested(content) {
-  let properties = '';
-  let nested = '';
-  let depth = 0;
+function extractPropsAndNested (content) {
+  let properties    = '';
+  let nested        = '';
+  let depth         = 0;
   let currentNested = '';
 
   for (let i = 0; i < content.length; i++) {
@@ -108,3 +108,6 @@ function extractPropsAndNested(content) {
 
   return { properties, nested };
 }
+
+export { compile };
+export default compile;
