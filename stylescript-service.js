@@ -1,14 +1,10 @@
-import { compileStyleScript } from './stylescript-compiler.js';
+import compile from './stylescript-compiler.js';
 
 // 1. Activate immediately during install phase
-self.addEventListener('install', () => {
-  self.skipWaiting();
-});
+self.addEventListener('install', () => { self.skipWaiting(); });
 
 // 2. Claim active clients immediately
-self.addEventListener('activate', (event) => {
-  event.waitUntil(self.clients.claim());
-});
+self.addEventListener('activate', (event) => { event.waitUntil(self.clients.claim()); });
 
 // 3. Intercept request pipeline for .ss files
 self.addEventListener('fetch', (event) => {
@@ -20,10 +16,10 @@ self.addEventListener('fetch', (event) => {
         try {
           // Fetch raw StyleScript file from server
           const response = await fetch(event.request);
-          const ssCode = await response.text();
+          const ssCode   = await response.text();
 
           // Transpile StyleScript to CSS on the fly
-          const cssCode = compileStyleScript(ssCode);
+          const cssCode = compile(ssCode);
 
           // Return compiled CSS directly to browser rendering engine
           return new Response(cssCode, {
