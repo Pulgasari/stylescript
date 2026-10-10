@@ -15,7 +15,7 @@ export async function middleware (request) {
   if (!response.ok) return response;
   
   // 3. transpile StyleScript to CSS at the edge
-  const ssCode = await response.text();
+  const  ssCode = await response.text();
   const cssCode = compile(ssCode);
 
   // 4. return compiled CSS to the browser
