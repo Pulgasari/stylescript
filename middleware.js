@@ -26,4 +26,6 @@ export async function middleware (request) {
       'Cache-Control': 'public, max-age=0, must-revalidate',
     },
   });
-  }
+}
+
+export default middleware;
