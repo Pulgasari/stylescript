@@ -1,0 +1,17 @@
+{
+  "name"         : "@stylescript/web",
+  "version"      : "0.0.1",
+  "description"  : "StyleScript in the browser: <style-script>, a service worker, edge middleware",
+  "type"         : "module",
+  "main"         : "./index.js",
+  "types"        : "./index.d.ts",
+  "exports"      : {
+    "."                   : "./index.js",
+    "./element.js"        : "./element.js",
+    "./middleware.js"     : "./middleware.js",
+    "./register.js"       : "./register.js",
+    "./service-worker.js" : "./service-worker.js"
+  },
+  "dependencies" : { "@stylescript/compiler": "0.0.1" },
+  "license"      : "MIT"
+}

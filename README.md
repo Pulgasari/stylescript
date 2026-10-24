@@ -1,6 +1,21 @@
 # stylescript
 
-## strategies
+a language for styles, compiled to css. the syntax is not decided yet, see CONCEPT.md.
+
+| package | | |
+|---|---|---|
+| `@stylescript/compiler` | [packages/compiler](packages/compiler) | source in, css out |
+| `@stylescript/web` | [packages/web](packages/web) | `<style-script>`, a service worker, vercel middleware |
+| `@stylescript/cli` | [packages/cli](packages/cli) | `.ss` files to `.css` files |
+
+## demos
+
+- `index.html`: `<style-script src='./demo.ss'>`, compiled in the page
+- `demo1/`: a plain `<link rel='stylesheet' href='demo.ss'>`, compiled by a service worker
+- `demo2/`: the same link, compiled by the vercel middleware (`middleware.js` at the root)
+
+## strategies (the first sketch)
+
 
 ### 1. service worker
 

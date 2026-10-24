@@ -1,10 +1,14 @@
-/**
- * StyleScript to CSS Transpiler
- * Features:
- * - Variable declarations ($var = value;) and usage
- * - Nested CSS rules (.card { h1 { ... } })
- * - Parent selector substitution (&:hover)
- */
+// @stylescript/compiler :: compile
+
+/*
+the prototype: no syntax of its own yet, only what the demos use.
+
+  $accent = #ff8800;                 a variable, $accent anywhere after it
+  .card { h1 { … } &:hover { … } }   nesting, & is the parent selector
+
+source in, css out.
+*/
+
 function compile (ssCode) {
   // 1. Substitute variables
   const vars = {};
@@ -108,6 +112,8 @@ function extractPropsAndNested (content) {
 
   return { properties, nested };
 }
+
+// :::::: EXPORT
 
 export { compile };
 export default compile;

@@ -1,0 +1,10 @@
+{
+  "name"        : "@stylescript/compiler",
+  "version"     : "0.0.1",
+  "description" : "StyleScript to css",
+  "type"        : "module",
+  "main"        : "./index.js",
+  "types"       : "./index.d.ts",
+  "exports"     : { ".": "./index.js" },
+  "license"     : "MIT"
+}
