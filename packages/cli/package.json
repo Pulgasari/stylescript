@@ -1,0 +1,9 @@
+{
+  "name"         : "@stylescript/cli",
+  "version"      : "0.0.1",
+  "description"  : "StyleScript to css files from the command line",
+  "type"         : "module",
+  "bin"          : { "stylescript": "./index.js" },
+  "dependencies" : { "@stylescript/compiler": "0.0.1" },
+  "license"      : "MIT"
+}
