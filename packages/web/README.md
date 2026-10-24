@@ -17,6 +17,25 @@ three ways to get StyleScript into a page, all through `@stylescript/compiler`.
 
 the css is adopted into the document while the element is there. events `stylescript:load`, `stylescript:error`.
 
+loads a StyleScript file, compiles it and adopts the css into the document. 
+
+```html
+<style-script src='./main.ss'></style-script>
+```
+
+without src the text inside is the source:
+
+```html
+<style-script>
+  $accent = #f80;
+  .card { color: $accent; }
+</style-script>
+```
+
+the sheet lives as long as the element: a new src recompiles, removing the
+element removes its css. events: 'stylescript:load' ({ css }),
+'stylescript:error' ({ error }).
+
 ## service worker
 
 ```js
