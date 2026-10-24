@@ -1,21 +1,8 @@
 // @stylescript/web :: element
 
-/*
-<style-script src='./main.ss'></style-script>: loads a StyleScript file,
-compiles it and adopts the css into the document. without src the text
-inside is the source:
-
-  <style-script>
-    $accent = #f80;
-    .card { color: $accent; }
-  </style-script>
-
-the sheet lives as long as the element: a new src recompiles, removing the
-element removes its css. events: 'stylescript:load' ({ css }),
-'stylescript:error' ({ error }).
-*/
-
 import compile from '../compiler/index.js';
+
+const sheets = document.adoptedStyleSheets;
 
 class StyleScriptElement extends HTMLElement {
   static observedAttributes = ['src'];
@@ -25,16 +12,16 @@ class StyleScriptElement extends HTMLElement {
 
   connectedCallback () {
     this.hidden = true;
-    document.adoptedStyleSheets = [...document.adoptedStyleSheets, this.#sheet];
+    sheets = [...sheets, this.#sheet];
     this.refresh();
   }
 
   disconnectedCallback () {
-    document.adoptedStyleSheets = document.adoptedStyleSheets.filter(sheet => sheet !== this.#sheet);
+    sheets = sheets.filter(sheet => sheet !== this.#sheet);
   }
 
-  attributeChangedCallback (name, previous, next) {
-    if (this.isConnected && previous !== next) this.refresh();
+  attributeChangedCallback (name, prev, next) {
+    if (this.isConnected && prev !== next) this.refresh();
   }
 
   get src ()      { return this.getAttribute('src'); }
