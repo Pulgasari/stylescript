@@ -27,7 +27,7 @@ async function fallback () {
   }));
 }
 
-function register (url = './sw.js') {
+function register (url = './service-worker.js') {
   if (!('serviceWorker' in navigator)) return fallback();
   navigator.serviceWorker.register(url, { type: 'module' }).catch(error => console.error('[stylescript] service worker:', error));
   if (!navigator.serviceWorker.controller) return fallback();
